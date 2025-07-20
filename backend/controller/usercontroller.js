@@ -59,6 +59,7 @@ const login = async(req, res)=>{
     }
 }
 
+// get info of all users
 const getusers = async(req, res)=>{
     try{
         const users = await usermodel.find().select('-password');
@@ -67,4 +68,47 @@ const getusers = async(req, res)=>{
         return res.status(500).json({error: 'internal server error'}, message.error)
     }
 }
-module.exports = {registeruser, login, getusers};
+
+// get one user by email
+const getuserbyemail = async(req, res)=>{
+    try{
+        const email = req.params.email;
+        // if user didnt send us email
+        if(!email){
+            return res.status(400).json({error: 'email is required'});
+        }
+
+        // if there is no record with email
+        const user = await usermodel.findOne({email}).select('-password')
+        if(!user){
+            return res.status(404).json({error: 'this email does not exist'})
+        }
+        return res.status(200).json({message: 'user fetched', user:user})
+
+    }catch(error){
+        return res.status(500).json({error: 'internal server error', error:error})
+    }
+}
+
+// update user by id
+const updateuser = async(req, res)=>{
+    try{
+        // getting id from params meaning from user it will appear in url bar
+        const id = req.params.id;
+        // if user didnt typed/given id
+        if(!id){
+            return res.status(400).json({error: 'id is required'})
+        }
+        // await makes this synchornous
+        // find user by id and update body (but it do not update id).
+        const user = await usermodel.findOneAndUpdate({_id:id}, req.body,{new:true});
+        if(!user){
+            return res.status(404).json({error: 'user not found'})
+        }
+        return res.status(200).json({message:'user updated successfully', user:user})
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({error: 'internal server error'})
+    }
+}
+module.exports = {registeruser, login, getusers, getuserbyemail, updateuser};
