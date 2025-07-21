@@ -150,6 +150,19 @@
       cursor: pointer;
     }
 
+    .delete-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     @keyframes fadeIn {
       from {opacity: 0;}
       to {opacity: 1;}
@@ -285,6 +298,7 @@
             <h4>${user.username}</h4>
             <p>${user.email}</p>
             <button class="edit-btn" onclick='loadEditUser("${user._id}", "${user.username}", "${user.email}")'>Edit</button>
+            <button class="delete-btn" onclick='deleteUser("${user._id}")'>Delete</button>
           `;
           list.appendChild(card);
         });
@@ -340,6 +354,7 @@
           <h4>${user.username}</h4>
           <p>${user.email}</p>
           <button class="edit-btn" onclick='loadEditUser("${user._id}", "${user.username}", "${user.email}")'>Edit</button>
+          <button class="delete-btn" onclick='deleteUser("${user._id}")'>Delete</button>
         `;
         list.appendChild(card);
       } else {
@@ -347,7 +362,22 @@
       }
     }
 
-    // default view
+    async function deleteUser(id) {
+      if (!confirm("Are you sure you want to delete this user?")) return;
+
+      const res = await fetch(`${API}/deleteuser/${id}`, {
+        method: 'DELETE'
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        showToast('User deleted');
+        fetchUsers();
+      } else {
+        showToast(data.error || 'Delete failed', true);
+      }
+    }
+
     showView('login');
   </script>
 </body>
