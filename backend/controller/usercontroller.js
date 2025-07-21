@@ -60,6 +60,7 @@ const login = async(req, res)=>{
 }
 
 // get info of all users
+// http://localhost:4000/api/getusers
 const getusers = async(req, res)=>{
     try{
         const users = await usermodel.find().select('-password');
@@ -70,6 +71,7 @@ const getusers = async(req, res)=>{
 }
 
 // get one user by email
+// http://localhost:4000/api/getuserbyemail/<email>
 const getuserbyemail = async(req, res)=>{
     try{
         const email = req.params.email;
@@ -91,6 +93,7 @@ const getuserbyemail = async(req, res)=>{
 }
 
 // update user by id
+// http://localhost:4000/api/updateuser/<user id>
 const updateuser = async(req, res)=>{
     try{
         // getting id from params meaning from user it will appear in url bar
@@ -111,4 +114,22 @@ const updateuser = async(req, res)=>{
         return res.status(500).json({error: 'internal server error'})
     }
 }
-module.exports = {registeruser, login, getusers, getuserbyemail, updateuser};
+
+const deleteuser = async(req, res)=>{
+    try{
+        const id = req.params.id;
+        if(!id){
+            return res.status(400).json({error: "id is required"});
+        }
+        // awaits makes it wait and doesnot let it to jump to next task
+        const deleteduser = await usermodel.findByIdAndDelete(id);
+
+        if(!deleteduser){
+            return res.status(404).json({error: "delete failed user not found"})
+        }
+        return res.status(200).json({message: "user successfully deleted", user:deleteduser})
+    }catch(error){
+        return res.status(500).json({error: "internal server error"})
+    }
+}
+module.exports = {registeruser, login, getusers, getuserbyemail, updateuser, deleteuser};
