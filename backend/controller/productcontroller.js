@@ -1,6 +1,7 @@
 const productmodel = require("../model/productmodel");
 const usermodel = require("../model/usermodel");
 
+// http://localhost:4000/api/createproduct/<admin id>
 const createproduct = async(req,res)=>{
     try{
         const userid = req.params.userid;
@@ -14,7 +15,7 @@ const createproduct = async(req,res)=>{
         if(!user){
             return res.status(400).json({error: 'user not found'})
         }
-
+        // checking if the userid is of admin
         if(user.isAdmin!==true){
             return res.status(400).json({error: 'user is not admin'})
         }
@@ -29,6 +30,7 @@ const createproduct = async(req,res)=>{
     }
 }
 
+// http://localhost:4000/api/getproducts
 const getproducts = async(req, res)=>{
     try{
         let products = await productmodel.find()
@@ -38,6 +40,7 @@ const getproducts = async(req, res)=>{
     }
 }
 
+// http://localhost:4000/api/getproductbyid/<id>
 const getproductbyid = async(req, res)=>{
     try{
         let id = req.params.id;
@@ -57,4 +60,38 @@ const getproductbyid = async(req, res)=>{
     }
 }
 
-module.exports={createproduct, getproducts, getproductbyid}
+const updateproduct = async(req, res)=>{
+    try{
+        // getting id to update product
+        const id = req.params.id;
+        if(!id){
+            return res.status(400).json({error: 'id is required'})
+        }
+
+        const product = await productmodel.findByIdAndUpdate(id, req.body);
+        if(!product){
+            return res.status(400).json({error: 'product does not exist'})
+        }
+        return res.status(200).json({message: 'product updated successfully', product:product})
+
+    }catch(error){
+        return res.status(500).json({error: 'internal server error'})
+    }
+}
+
+const deleteproduct = async(req, res)=>{
+    try{
+        const id = req.params.id;
+        if(!id){
+            return res.status(400).json({error: 'id is required'})
+        }
+        const deletedproduct = await productmodel.findByIdAndDelete(id);
+        if(!deletedproduct){
+            return res.status(404).json({error: 'product delete failed'})
+        }
+        return res.status(200).json({message: 'product deleted successfully'})
+    }catch(error){
+        return res.status(500).json({error: 'internal server error'})
+    }
+}
+module.exports={createproduct, getproducts, getproductbyid, updateproduct, deleteproduct}
