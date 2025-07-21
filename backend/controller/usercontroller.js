@@ -115,6 +115,8 @@ const updateuser = async(req, res)=>{
     }
 }
 
+// delete user by id
+// http://localhost:4000/api/deleteuser/<id>
 const deleteuser = async(req, res)=>{
     try{
         const id = req.params.id;
