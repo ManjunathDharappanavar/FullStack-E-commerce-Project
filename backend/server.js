@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const connect = require('./db/connectdb')
 const userroute = require('./route/userroute')
+const productroute = require('./route/productroute')
 const cors = require('cors')
 
 const app = express();
@@ -15,7 +16,7 @@ app.get('/api/test',(req, res)=>{
 })
 
 app.use('/api',userroute);
-
+app.use('/api', productroute);
 
 app.listen(4000,()=>{
     console.log("server running on port: 4000");
