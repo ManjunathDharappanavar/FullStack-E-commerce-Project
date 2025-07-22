@@ -2,6 +2,7 @@ const productmodel = require("../model/productmodel");
 const usermodel = require("../model/usermodel");
 const cartmodel = require("../model/cartmodel");
 
+// http://localhost:4000/api/addtocart/<userid>/<productid>/<quantity>
 const addtocart = async (req, res)=>{
     try{
         const userid = req.params.userid;
@@ -31,6 +32,8 @@ const addtocart = async (req, res)=>{
     }
 }
 
+
+// http://localhost:4000/api/getcartofuser/<userid>
 const getcartofuser = async(req, res)=>{
     try{
         const userid = req.params.userid;
@@ -56,5 +59,39 @@ const getcartofuser = async(req, res)=>{
     }
 }
 
+const updatecart = async(req, res)=>{
+    try{
+        const cartid = req.params.cartid;
+        const quantity = req.params.quantity || 1;
+        if(!cartid){
+            return res.status(400).json({error: 'cart id required'})
+        }
 
-module.exports={addtocart, getcartofuser}
+        const updatedcart = await cartmodel.findByIdAndUpdate(cartid, {quantity})
+        if(!updatedcart){
+            return res.status(400).json({error: 'cart not updated'})
+        }
+        return res.status(200).json({message: 'cart updated successfully', updatecart:updatedcart})
+
+    }catch(error){
+        return res.status(500).json({error: 'internal server error'})
+    }
+}
+
+const deletecart = async(req, res)=>{
+    try{
+        const cartid = req.params.cartid
+        if(!cartid){
+            return res.status(400).json({error: 'cart id required'})
+        }
+        const deletedcart = await cartmodel.findByIdAndDelete(cartid)
+        if(!deletedcart){
+            return res.status(400).json({error: 'cart not deleted'})
+        }
+        return res.status(200).json({message: 'cart deleted successfully', deletedcart:deletedcart})
+    }catch(error){
+        return res.status(500).json({error: 'internal server error'})
+    }
+}
+
+module.exports={addtocart, getcartofuser, updatecart, deletecart}
