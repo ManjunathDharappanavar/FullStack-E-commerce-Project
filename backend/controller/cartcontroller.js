@@ -34,22 +34,27 @@ const addtocart = async (req, res)=>{
 const getcartofuser = async(req, res)=>{
     try{
         const userid = req.params.userid;
+        // check if user sent user id or not
         if(!userid){
             return res.status(400).json({error: 'user id required'})
         }
 
         const user = await usermodel.findById(userid);
+        // checking if user exist
         if(!user){
             return res.status(400).json({error: 'user not exist'})
         }
 
-        const cart = await cartmodel.find({userid});
-        if(!cart){
-            return res.status(400).json({error: 'cart not exist'})
-        }
+
+        const cart = await cartmodel.find({userid}).populate('userid', '-password').populate('productid')
+        // if(!cart){
+        //     return res.status(400).json({error: 'cart not exist'})
+        // }
         return res.status(200).json({message: 'your cart fetched successfully', cart:cart})
     }catch(error){
         return res.status(500).json({error: 'internal server error'})
     }
 }
+
+
 module.exports={addtocart, getcartofuser}
