@@ -60,6 +60,7 @@ const getproductbyid = async(req, res)=>{
     }
 }
 
+// http://localhost:4000/api/updateproduct/<id>
 const updateproduct = async(req, res)=>{
     try{
         // getting id to update product
@@ -79,6 +80,7 @@ const updateproduct = async(req, res)=>{
     }
 }
 
+// http://localhost:4000/api/deleteproduct/<id>
 const deleteproduct = async(req, res)=>{
     try{
         const id = req.params.id;
