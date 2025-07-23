@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {registeruser, login, getusers, getuserbyemail, updateuser, deleteuser} = require('../controller/usercontroller')
 
+// endpoints
 router.post('/register', registeruser)
 router.post('/login', login)
 router.get('/getusers', getusers)
