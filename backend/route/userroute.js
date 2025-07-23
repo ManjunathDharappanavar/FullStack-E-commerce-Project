@@ -10,4 +10,5 @@ router.get('/getuserbyemail/:email',getuserbyemail)
 router.put('/updateuser/:id',updateuser)
 router.delete('/deleteuser/:id',deleteuser)
 
+// all endpoints are working
 module.exports=router;

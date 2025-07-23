@@ -91,7 +91,7 @@ const deleteproduct = async(req, res)=>{
         if(!deletedproduct){
             return res.status(404).json({error: 'product delete failed'})
         }
-        return res.status(200).json({message: 'product deleted successfully'})
+        return res.status(200).json({message: 'product deleted successfully', deletedproduct:deletedproduct})
     }catch(error){
         return res.status(500).json({error: 'internal server error'})
     }

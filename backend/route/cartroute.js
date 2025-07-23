@@ -8,4 +8,6 @@ router.post('/addtocart/:userid/:productid/:quantity', addtocart)
 router.get('/getcartofuser/:userid', getcartofuser)
 router.patch('/updatecart/:cartid/:quantity', updatecart)
 router.delete('/deletecart/:cartid', deletecart)
+
+// all endpoints are working
 module.exports=router

@@ -10,6 +10,7 @@ const orderschema = mongoose.Schema({
     status: {type:String, enum:["pending", "completed"], default:"pending"},
     orderdate: {type:Date, default:Date.now},
     deliverydate: {type:Date},
+    iscancle: {type:Boolean, default:false},
     shippingaddress:{type:String, required:true},
     createdAt:{type:Date, default:Date.now},
     updatedAt:{type:Date, default:Date.now}
