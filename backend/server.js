@@ -27,3 +27,9 @@ app.listen(4000,()=>{
     console.log("server running on port: 4000");
     
 })
+
+
+// satish icheri ip address
+// app.listen(4000, '192.168.0.113', () => {
+//   console.log("server running");
+// });

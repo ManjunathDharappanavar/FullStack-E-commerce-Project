@@ -38,7 +38,7 @@ const createorder=async(req,res)=>{
               let neworder=new ordersmodel(neworderobj);
               await neworder.save();
               let updatedstock=product.stock_available-quantity;
-              await productmodel.findOneAndUpdate(productid,{stock_available:updatedstock})
+              await productmodel.findByIdAndUpdate(productid,{stock_available:updatedstock})
               return res.status(200).json({ message: "order created successfully", order: neworder })
 
            }else{
